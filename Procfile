@@ -1,2 +1,2 @@
-web: yarn start --services=web,websockets,collaboration
-worker: yarn start --services=worker
+web: node ./build/server/index.js
+postdeploy: yarn db:migrate
