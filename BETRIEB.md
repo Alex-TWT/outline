@@ -26,7 +26,10 @@ Code: Fork von `outline/outline`. Branch `twt` = letzter offizieller Release plu
 
 So wenige wie möglich, damit Updates ohne Konflikte durchlaufen.
 
-- `Procfile`: ein Container für alles, Migrationen nach jedem Deploy.
+- `Procfile`: ein Container für alles. Nach jedem Deploy: CORS-Regel des
+  Anhang-Buckets setzen, dann Datenbank-Migrationen.
+- `twt/s3-cors.js`: setzt die CORS-Regel, damit Browser direkt in den Bucket
+  hochladen dürfen (nur für die Adresse aus `URL`).
 - `BETRIEB.md`: diese Datei.
 
 Alles andere steuern Umgebungsvariablen. Wichtig: `SERVICES` muss `cron`
@@ -45,7 +48,11 @@ enthalten, sonst laufen geplante Aufgaben (Papierkorb leeren, Aufräumen) nicht.
 | `SECRET_KEY`, `UTILS_SECRET` | Zufallswerte, **nie ändern** (sonst sind verschlüsselte Daten weg) |
 | `DATABASE_URL`, `REDIS_URL` | setzt Scalingo über die Add-ons |
 | `FILE_STORAGE` | `s3` |
-| `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `AWS_S3_UPLOAD_BUCKET_URL`, `AWS_S3_UPLOAD_BUCKET_NAME`, `AWS_S3_FORCE_PATH_STYLE`, `AWS_S3_ACL` | Hetzner-Bucket |
+| `AWS_REGION` | `fsn1` |
+| `AWS_S3_UPLOAD_BUCKET_URL` | `https://fsn1.your-objectstorage.com` |
+| `AWS_S3_UPLOAD_BUCKET_NAME` | `twt-wiki-anhaenge` |
+| `AWS_S3_FORCE_PATH_STYLE`, `AWS_S3_ACL` | `false`, `private` |
+| `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | Hetzner S3-Zugangsdaten (Projekt „Default“) |
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Google Cloud Projekt „TWT Outline“, App-Typ intern |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_FROM_EMAIL`, `SMTP_SECURE` | Workspace-Relay |
 

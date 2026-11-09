@@ -1,2 +1,2 @@
 web: node ./build/server/index.js
-postdeploy: yarn db:migrate
+postdeploy: node twt/s3-cors.js && yarn db:migrate
