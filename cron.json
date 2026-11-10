@@ -1,0 +1,8 @@
+{
+  "jobs": [
+    {
+      "command": "0 5 1 * * node twt/mail-check.js",
+      "size": "S"
+    }
+  ]
+}

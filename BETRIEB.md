@@ -30,6 +30,7 @@ So wenige wie möglich, damit Updates ohne Konflikte durchlaufen.
   Anhang-Buckets setzen, dann Datenbank-Migrationen.
 - `twt/s3-cors.js`: setzt die CORS-Regel, damit Browser direkt in den Bucket
   hochladen dürfen (nur für die Adresse aus `URL`).
+- `twt/mail-check.js` und `cron.json`: monatliche Testmail (siehe Update).
 - `BETRIEB.md`: diese Datei.
 
 Alles andere steuern Umgebungsvariablen. Nach einer Änderung in Scalingo greift
@@ -95,8 +96,30 @@ Anhänge in S3 statt auf der Container-Festplatte.
 
 ## Update (monatlich)
 
-_Wird beim Aufbau ergänzt: automatische Vorbereitung als Pull Request, Freigabe,
-Deploy, Prüfung von `/_health`, Login und MCP._
+Läuft automatisch als geplante Aufgabe in Claude („TWT Wiki Monatsupdate“,
+am 2. jedes Monats). Ablauf:
+
+1. Neuesten offiziellen Outline-Release suchen (keine Vorabversionen).
+2. Gleiche Hauptversion (z. B. 1.x → 1.y) und keine Hinweise auf nötige
+   Umbauten in den Release-Notes: Release in `twt` mergen, pushen. Scalingo
+   deployt, Migrationen laufen im `postdeploy`.
+3. Neue Hauptversion, Merge-Konflikt außerhalb der TWT-Dateien oder geänderte
+   Pflicht-Variablen: **kein** Merge. Die Routine meldet, was zu tun ist.
+4. Prüfen: `/_health` antwortet `OK`, Anmeldeseite lädt, MCP antwortet.
+5. Mailversand prüfen (siehe unten).
+6. Kurzer Bericht an Alex.
+
+**Mail-Check:** `cron.json` startet am 1. jedes Monats um 05:00 UTC
+`twt/mail-check.js`. Das Skript schickt über den Wiki-Mailzugang eine Testmail
+„TWT Wiki Mailtest JJJJ-MM“ an `SMTP_REPLY_EMAIL`. Die Routine sucht sie am 2. im
+Postfach. Fehlt sie, ist fast immer das App-Passwort ungültig (siehe oben:
+Google-Passwort geändert). Manuell testen: in Scalingo `scalingo --app twt-wiki
+run node twt/mail-check.js`.
+
+**Deploy schiefgegangen:** Scalingo lässt bei einem fehlgeschlagenen Build die
+alte Version laufen. Startet die neue Version nicht, in Scalingo unter
+Deployments die vorige Version neu deployen und die Datenbank prüfen (Backup
+unten).
 
 ## Backup
 
