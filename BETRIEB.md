@@ -32,7 +32,8 @@ So wenige wie möglich, damit Updates ohne Konflikte durchlaufen.
   hochladen dürfen (nur für die Adresse aus `URL`).
 - `BETRIEB.md`: diese Datei.
 
-Alles andere steuern Umgebungsvariablen. Wichtig: `SERVICES` muss `cron`
+Alles andere steuern Umgebungsvariablen. Nach einer Änderung in Scalingo greift
+sie erst nach einem Neustart oder Deploy. Wichtig: `SERVICES` muss `cron`
 enthalten, sonst laufen geplante Aufgaben (Papierkorb leeren, Aufräumen) nicht.
 
 ## Umgebungsvariablen (nur Namen, Werte in Scalingo/1Password)
@@ -52,6 +53,8 @@ enthalten, sonst laufen geplante Aufgaben (Papierkorb leeren, Aufräumen) nicht.
 | `AWS_S3_UPLOAD_BUCKET_URL` | `https://fsn1.your-objectstorage.com` |
 | `AWS_S3_UPLOAD_BUCKET_NAME` | `twt-wiki-anhaenge` |
 | `AWS_S3_FORCE_PATH_STYLE`, `AWS_S3_ACL` | `false`, `private` |
+| `FILE_STORAGE_UPLOAD_MAX_SIZE` | `104857600` (100 MB pro Anhang; Standard wäre 1 MB) |
+| `FILE_STORAGE_WORKSPACE_IMPORT_MAX_SIZE` | `524288000` (500 MB für den Import ganzer Arbeitsbereiche, z. B. Notion) |
 | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | Hetzner S3-Zugangsdaten (Projekt „Default“) |
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Google Cloud Projekt „TWT Outline“, App-Typ intern |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE` | `smtp-relay.gmail.com`, `587`, `false` (STARTTLS) |
