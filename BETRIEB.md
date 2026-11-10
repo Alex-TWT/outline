@@ -33,6 +33,7 @@ So wenige wie möglich, damit Updates ohne Konflikte durchlaufen.
 - `twt/mail-check.js` und `cron.json`: monatliche Testmail (siehe Update),
   Warnmail bei Backup-Fehlern.
 - `twt/backup.sh`, `twt/backup.js`: nächtliches Backup zu Scaleway.
+- `twt/restore-test.sh`, `twt/restore-fetch.js`: Wiederherstellungstest.
 - `BETRIEB.md`: diese Datei.
 
 Alles andere steuern Umgebungsvariablen. Nach einer Änderung in Scalingo greift
@@ -160,8 +161,13 @@ Monatsroutine wertet ihn aus.
 - **Anhänge:** `twt-wiki-backup/anhaenge/` zurück nach `twt-wiki-anhaenge`
   kopieren (z. B. rclone, Quelle Scaleway, Ziel Hetzner; Pfade ohne Präfix
   `anhaenge/`).
-- Kompletter Wiederherstellungstest: steht noch aus (temporäre zweite Datenbank,
-  Freigabe durch Alex).
+- **Wiederherstellungstest:** `bash twt/restore-test.sh` (z. B. per
+  `scalingo --app twt-wiki run bash twt/restore-test.sh`). Holt den neuesten
+  Dump aus Scaleway, spielt ihn in das getrennte Schema `restore_test` der
+  Live-Datenbank ein (Scalingo erlaubt keine zweite Datenbank), vergleicht
+  Tabellen und Zeilen mit live, prüft eine Anhang-Kopie per SHA-256 und löscht
+  das Schema wieder. Erster Test am 10.11.2026: 45 von 45 Tabellen, 0 Fehler,
+  alle Zeilenzahlen gleich, Anhang identisch.
 
 Ausführliche Fassung mit Zugängen und Notfällen: im Wiki, Sammlung
 „TWT Technik“, Dokument „TWT Wiki: Aufbau und Betrieb“.
