@@ -126,8 +126,9 @@ unten).
 
 ## Backup
 
-1. **Scalingo:** tägliche Datenbank-Backups, Wiederherstellung auf jeden
-   Zeitpunkt der letzten 7 Tage (ohne Anhänge, gleicher Anbieter).
+1. **Scalingo:** tägliches Datenbank-Backup um 0:00 UTC, aufbewahrt 7 Tage
+   plus 4 Sonntags-Backups (Starter-Plan, keine Zeitpunkt-Wiederherstellung;
+   ohne Anhänge, gleicher Anbieter).
 2. **Nächtlich zu Scaleway** (`cron.json`, 01:30 UTC, `twt/backup.sh` →
    `twt/backup.js`), Bucket `twt-wiki-backup` in Paris (Projekt „TWT Wiki“):
    - `datenbank/JJJJ-MM-TT.pgsql`: `pg_dump` im Custom-Format. Jeder Dump
@@ -150,8 +151,8 @@ Monatsroutine wertet ihn aus.
 
 ## Wiederherstellung
 
-- **Bis 7 Tage zurück:** Scalingo → twt-wiki → Add-on PostgreSQL → Backups →
-  Point-in-time-Wiederherstellung.
+- **Aus Scalingo:** PostgreSQL-Dashboard → Backups → Backup herunterladen,
+  dann wie unten mit `pg_restore` einspielen.
 - **Aus Scaleway:** Dump herunterladen, dann
   `scalingo --app twt-wiki db-tunnel SCALINGO_POSTGRESQL_URL` und
   `pg_restore --clean --if-exists --no-owner --no-privileges -d "<Tunnel-URL>" <dump>.pgsql`.

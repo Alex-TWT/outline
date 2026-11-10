@@ -9,7 +9,7 @@
       "size": "S"
     },
     {
-      "command": "15 9 10 11 * bash twt/restore-test.sh",
+      "command": "40 9 10 11 * bash twt/restore-test.sh",
       "size": "M"
     }
   ]
