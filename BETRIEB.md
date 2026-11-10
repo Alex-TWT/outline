@@ -56,6 +56,15 @@ enthalten, sonst laufen geplante Aufgaben (Papierkorb leeren, Aufräumen) nicht.
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Google Cloud Projekt „TWT Outline“, App-Typ intern |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_FROM_EMAIL`, `SMTP_SECURE` | Workspace-Relay |
 
+## Einstellungen im Wiki (Admin)
+
+- Authentifizierung: Google an, erlaubte Domain nur `tech-well-told.de`.
+  Login per E-Mail an (braucht SMTP). Mail-Login funktioniert nur für bereits
+  eingeladene Personen; unbekannte Adressen bekommen keinen Link.
+- Sicherheit: Standard-Rolle „Betrachter“, Einladungen nur durch Admins.
+- KI: MCP-Server an. Adresse für Claude: `https://wiki.tech-well-told.de/mcp`
+  (Anmeldung per OAuth, Rechte wie die verbundene Person).
+
 ## Zugänge (wer verwaltet was)
 
 | Dienst | Konto | Zugang in 1Password |
