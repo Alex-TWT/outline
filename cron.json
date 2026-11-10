@@ -7,14 +7,6 @@
     {
       "command": "0 5 1 * * node twt/mail-check.js",
       "size": "S"
-    },
-    {
-      "command": "30 8 10 11 * bash twt/backup.sh",
-      "size": "M"
-    },
-    {
-      "command": "40 8 10 11 * node twt/mail-check.js",
-      "size": "S"
     }
   ]
 }

@@ -30,7 +30,9 @@ So wenige wie möglich, damit Updates ohne Konflikte durchlaufen.
   Anhang-Buckets setzen, dann Datenbank-Migrationen.
 - `twt/s3-cors.js`: setzt die CORS-Regel, damit Browser direkt in den Bucket
   hochladen dürfen (nur für die Adresse aus `URL`).
-- `twt/mail-check.js` und `cron.json`: monatliche Testmail (siehe Update).
+- `twt/mail-check.js` und `cron.json`: monatliche Testmail (siehe Update),
+  Warnmail bei Backup-Fehlern.
+- `twt/backup.sh`, `twt/backup.js`: nächtliches Backup zu Scaleway.
 - `BETRIEB.md`: diese Datei.
 
 Alles andere steuern Umgebungsvariablen. Nach einer Änderung in Scalingo greift
@@ -124,12 +126,41 @@ unten).
 
 ## Backup
 
-_Wird beim Aufbau ergänzt._
+1. **Scalingo:** tägliche Datenbank-Backups, Wiederherstellung auf jeden
+   Zeitpunkt der letzten 7 Tage (ohne Anhänge, gleicher Anbieter).
+2. **Nächtlich zu Scaleway** (`cron.json`, 01:30 UTC, `twt/backup.sh` →
+   `twt/backup.js`), Bucket `twt-wiki-backup` in Paris (Projekt „TWT Wiki“):
+   - `datenbank/JJJJ-MM-TT.pgsql`: `pg_dump` im Custom-Format. Jeder Dump
+     30 Tage, der vom 1. des Monats 365 Tage.
+   - `anhaenge/…`: Kopie neuer und geänderter Dateien aus Hetzner. Im Wiki
+     gelöschte Anhänge bleiben erhalten.
+   - `status/letztes-backup.json`: Zeitpunkt und Größe des letzten Laufs.
+3. **Object Lock** (`BACKUP_OBJECT_LOCK=an`, Compliance, 30 Tage): Keine
+   Version lässt sich vor Ablauf löschen, auch nicht mit dem Backup-Schlüssel.
+   Endgültig eingeschaltet.
 
-- Datenbank: Scalingo erstellt täglich ein Backup und erlaubt Wiederherstellung
-  auf jeden Zeitpunkt der letzten 7 Tage. Zusätzlich nächtlicher Dump zu Scaleway.
-- Anhänge: nächtliche Kopie des Hetzner-Buckets zu Scaleway.
+Variablen: `BACKUP_S3_ACCESS_KEY_ID`, `BACKUP_S3_SECRET_ACCESS_KEY` (Scaleway
+IAM-Application `twt-wiki-backup`, nur Object Storage im Projekt „TWT Wiki“).
+**Der Schlüssel läuft am 9. November 2027 ab** (Organisation erlaubt max. 1 Jahr).
+Vorher neuen erzeugen und in 1Password und Scalingo ersetzen.
+
+Überwachung: Fehlgeschlagene Läufe schicken sofort „TWT Wiki: Backup
+FEHLGESCHLAGEN“ an Alex. Die monatliche Testmail enthält den Backup-Stand, die
+Monatsroutine wertet ihn aus.
 
 ## Wiederherstellung
 
-_Wird beim Aufbau ergänzt und vor dem Livegang einmal komplett getestet._
+- **Bis 7 Tage zurück:** Scalingo → twt-wiki → Add-on PostgreSQL → Backups →
+  Point-in-time-Wiederherstellung.
+- **Aus Scaleway:** Dump herunterladen, dann
+  `scalingo --app twt-wiki db-tunnel SCALINGO_POSTGRESQL_URL` und
+  `pg_restore --clean --if-exists --no-owner --no-privileges -d "<Tunnel-URL>" <dump>.pgsql`.
+  Danach App neu starten.
+- **Anhänge:** `twt-wiki-backup/anhaenge/` zurück nach `twt-wiki-anhaenge`
+  kopieren (z. B. rclone, Quelle Scaleway, Ziel Hetzner; Pfade ohne Präfix
+  `anhaenge/`).
+- Kompletter Wiederherstellungstest: steht noch aus (temporäre zweite Datenbank,
+  Freigabe durch Alex).
+
+Ausführliche Fassung mit Zugängen und Notfällen: im Wiki, Sammlung
+„TWT Technik“, Dokument „TWT Wiki: Aufbau und Betrieb“.
