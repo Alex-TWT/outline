@@ -31,10 +31,13 @@ version({ connectionString: url })
   .catch((e) => { console.error(e.message); process.exit(1); });
 ' "$DB_URL")
 echo "[twt/backup] PostgreSQL-Server Version $PG_MAJOR"
-dbclient-fetcher pgsql "$PG_MAJOR" >/dev/null
+dbclient-fetcher postgresql "$PG_MAJOR" >/dev/null 2>&1 \
+  || dbclient-fetcher pgsql "$PG_MAJOR" >/dev/null 2>&1 \
+  || echo "[twt/backup] dbclient-fetcher ohne Erfolg, nutze vorhandenes pg_dump"
 export PATH="$HOME/bin:$PATH"
 PG_DUMP=$(command -v pg_dump || find / -name pg_dump -type f -perm -u+x 2>/dev/null | head -n 1)
 [ -n "$PG_DUMP" ] || fail "pg_dump nicht gefunden"
+echo "[twt/backup] $("$PG_DUMP" --version)"
 
 DUMP="${TMPDIR:-/tmp}/twt-wiki.pgsql"
 "$PG_DUMP" --clean --if-exists --format c --dbname "$DB_URL" \

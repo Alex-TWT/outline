@@ -34,7 +34,8 @@ async function backupStatus() {
     const hours = Math.round((Date.now() - new Date(s.zeit).getTime()) / 36e5);
     return (
       `Backup: letztes erfolgreiches Backup ${s.zeit} (vor ${hours} Stunden), ` +
-      `Dump ${Math.round(s.dumpBytes / 1024)} KB, ${s.anhaengeGesamt} Anhänge.` +
+      `Dump ${Math.round(s.dumpBytes / 1024)} KB, ${s.anhaengeGesamt} Anhänge, ` +
+      `Object Lock ${s.objectLock ? "an" : "AUS"}.` +
       (hours > 48 ? " ACHTUNG: älter als 48 Stunden." : "")
     );
   } catch (err) {
