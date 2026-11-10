@@ -97,7 +97,8 @@ Anhänge in S3 statt auf der Container-Festplatte.
 ## Update (monatlich)
 
 Läuft automatisch als geplante Aufgabe in Claude („TWT Wiki Monatsupdate“,
-am 2. jedes Monats). Ablauf:
+am ersten Samstag jedes Monats um 10:47 Uhr, damit ein Ausfall das Team nicht
+trifft). Ablauf:
 
 1. Neuesten offiziellen Outline-Release suchen (keine Vorabversionen).
 2. Gleiche Hauptversion (z. B. 1.x → 1.y) und keine Hinweise auf nötige
@@ -111,7 +112,7 @@ am 2. jedes Monats). Ablauf:
 
 **Mail-Check:** `cron.json` startet am 1. jedes Monats um 05:00 UTC
 `twt/mail-check.js`. Das Skript schickt über den Wiki-Mailzugang eine Testmail
-„TWT Wiki Mailtest JJJJ-MM“ an `SMTP_REPLY_EMAIL`. Die Routine sucht sie am 2. im
+„TWT Wiki Mailtest JJJJ-MM“ an `SMTP_REPLY_EMAIL`. Die Routine sucht sie am ersten Samstag im
 Postfach. Fehlt sie, ist fast immer das App-Passwort ungültig (siehe oben:
 Google-Passwort geändert). Manuell testen: in Scalingo `scalingo --app twt-wiki
 run node twt/mail-check.js`.
