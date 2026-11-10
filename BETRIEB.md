@@ -54,7 +54,17 @@ enthalten, sonst laufen geplante Aufgaben (Papierkorb leeren, Aufräumen) nicht.
 | `AWS_S3_FORCE_PATH_STYLE`, `AWS_S3_ACL` | `false`, `private` |
 | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | Hetzner S3-Zugangsdaten (Projekt „Default“) |
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Google Cloud Projekt „TWT Outline“, App-Typ intern |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_FROM_EMAIL`, `SMTP_SECURE` | Workspace-Relay |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE` | `smtp-relay.gmail.com`, `587`, `false` (STARTTLS) |
+| `SMTP_NAME` | `wiki.tech-well-told.de` |
+| `SMTP_USERNAME`, `SMTP_PASSWORD` | Alex' Google-Konto plus App-Passwort „TWT Wiki“ |
+| `SMTP_FROM_EMAIL`, `SMTP_REPLY_EMAIL` | `TWT Wiki <wiki@tech-well-told.de>`, Antworten an Alex |
+
+Achtung Variablennamen: exakt so schreiben. Ein Tippfehler (z. B.
+`AWS_ACESS_KEY_ID`) fällt nicht beim Start auf, sondern erst, wenn Uploads scheitern.
+
+**Mail bricht ab, wenn Alex sein Google-Passwort ändert:** Dann wird das
+App-Passwort ungültig. Neues App-Passwort anlegen (myaccount.google.com →
+App-Passwörter), in 1Password und als `SMTP_PASSWORD` in Scalingo ersetzen.
 
 ## Einstellungen im Wiki (Admin)
 
