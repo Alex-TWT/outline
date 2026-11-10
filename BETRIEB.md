@@ -4,7 +4,7 @@ Outline als Team-Wiki von Tech Well Told, selbst gehostet in der EU.
 Adresse: https://wiki.tech-well-told.de
 
 **Geheimnisse stehen nie in diesem Repository.** Schlüssel und Passwörter liegen
-nur in den Scalingo-Umgebungsvariablen und in 1Password (Tresor „TWT Wiki“).
+nur in den Scalingo-Umgebungsvariablen und in 1Password (Tresor „TWT Technik“).
 
 ## Aufbau
 
